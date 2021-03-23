@@ -7,11 +7,14 @@ const nonce = require('nonce')();
 const querystring = require('querystring');
 const request = require('request-promise');
 const CryptoJS = require('crypto-js')
+const axios = require('axios');
+const { access } = require('fs');
+
 
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products';
-const forwardingAddress = "https://41d67114fe6d.ngrok.io";
+const forwardingAddress = "https://a8c59299b5ab.ngrok.io";
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -21,7 +24,7 @@ app.get('/shopify', (req, res) => {
     const shop = req.query.shop;
     if(shop) {
         const state = nonce();
-        const redirect_uri = forwardingAddress + '/shopify/callback';
+        const redirect_uri = forwardingAddress + '/callback';
         const installUrl = "https://" + shop + "/admin/oauth/authorize?client_id=" 
                             + apiKey + "&scope=" + scopes +"&state=" + state+
                              "&redirect_uri=" + redirect_uri;
@@ -37,10 +40,11 @@ app.get('/shopify', (req, res) => {
     }
 });
 
-app.get('/shopify/callback', (req, res) => {
+app.get('/callback',async (req, res) => {
     const { shop, hmac, code, state } = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
-  
+
+   
     if (state !== stateCookie) {
       return res.status(403).send('Request origin cannot be verified');
     }
@@ -50,28 +54,56 @@ app.get('/shopify/callback', (req, res) => {
         // console.log(map);
         delete map['hmac'];
         const msg = querystring.stringify(map)
-        var ciphertext = CryptoJS.HmacSHA256()
+        var hash = CryptoJS.HmacSHA256(msg,apiSecret)
+
         let flag = false
-        if (msg == ciphertext) {
+        if (hmac == hash) {
             flag = true;
         }
-    
-    
-      
+        
         // let flag = crypto.timingSafeEqual(newHmac, hash);
         if(flag) {
-            res.status(200).send("HMAC validated")
+            // res.status(200).send("HMAC validated")
+            try {
+              accessToken = await getAccessToken(code,shop);
+              console.log(accessToken);
+              res.send(accessToken);
+            } catch (error) {
+              console.log(error);
+              res.send(400);
+            }
         }
         else{
-            res.status(400).send("HMAC validation failed")
-
-        }
-
-        
+          return "Verification failed";
+        } 
     } else {
       res.status(400).send('Required parameters missing');
     }
   });
+
+  async function getAccessToken(code,shop) {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: "https://"+shop+"/admin/oauth/access_token",
+        headers:{
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        data : {
+          client_id: apiKey,
+          client_secret: apiSecret,
+          code: code
+        }
+      });
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return{code:400,message:"Requesting access token failed"};
+    }
+  }
+
 
 app.listen(3000, () => {
   console.log('Listening on port 3000:');
