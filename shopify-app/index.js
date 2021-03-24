@@ -19,7 +19,7 @@ const indexRouter = require('./routes/crud');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products';
-const forwardingAddress = "https://27626f65a291.ngrok.io";
+const forwardingAddress = "https://a4958827982b.ngrok.io";
 
 
 mongoose.connect('mongodb://localhost:27017/Shopify',{useNewUrlParser : true, useUnifiedTopology:true})
@@ -29,7 +29,7 @@ mongoose.connection.once('open',() => {
   console.error("mongodb connection failed");
 });
 
-app.use("/",indexRouter);
+// app.use("/",indexRouter);
 app.use(express.json())
 app.use("/crud",indexRouter);
 

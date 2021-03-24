@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const Store = require('../models/store');
+const axios = require('axios');
+
 
 async function getAccesstoken(store) {
     try {
         const token = await Store.findOne({name: store});
-        console.log(token)
+        // console.log("TOKEN.......",token)
+        return token.accessToken;
     } catch (error) {
         console.log(error);
         return;
@@ -48,16 +51,18 @@ async function addProduct(shop,productDetails) {
     var headers = await addHeaders(shop);
     var res = await endPointGetter("post",url,headers,productDetails)
     console.log(res);
+    return res;
 }
 
 router.post('/addProduct', async(req,res) => {
     console.log("in add product route");
 
     var shop = req.query.shop;
-    var productDetails = req.body;
-    console.log(shop,producDetails);
+    const details = req.body;
+    // console.log(req.body);
+    console.log(shop, details);
     try {
-      const products = await addProduct(shop, productDetails);
+      const products = await addProduct(shop, details);
       res.send(products)
     } catch (error) {
       return {msg: "Something went wrong"}
