@@ -9,12 +9,31 @@ const request = require('request-promise');
 const CryptoJS = require('crypto-js')
 const axios = require('axios');
 const { access } = require('fs');
+const mongoose = require('mongoose');
+
+const Store = require('./models/store');
+const indexRouter = require('./routes/crud');
+
 
 
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products';
-const forwardingAddress = "https://a8c59299b5ab.ngrok.io";
+const forwardingAddress = "https://27626f65a291.ngrok.io";
+
+
+mongoose.connect('mongodb://localhost:27017/Shopify',{useNewUrlParser : true, useUnifiedTopology:true})
+mongoose.connection.once('open',() => {
+  console.log("MongoDB connection has been made");
+}).on('error',function(err) {
+  console.error("mongodb connection failed");
+});
+
+app.use("/",indexRouter);
+app.use(express.json())
+app.use("/crud",indexRouter);
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -65,12 +84,26 @@ app.get('/callback',async (req, res) => {
         if(flag) {
             // res.status(200).send("HMAC validated")
             try {
-              accessToken = await getAccessToken(code,shop);
-              console.log(accessToken);
-              res.send(accessToken);
+              var response = await getAccessToken(code,shop);
+              // console.log(response);
+              const data = {
+                accessToken : response.access_token,
+                scopes : response.scope,
+                name : shop,
+                products :[]
+              }
+              var a2 = await addToDB(data);
+              // console.log(data);
+              if(a2 = "done") {
+                res.send("accessToken added to db");
+              } else {
+                res.send("accessToken saving failed");
+              }
+              
+
             } catch (error) {
               console.log(error);
-              res.send(400);
+              res.sendStatus(400);
             }
         }
         else{
@@ -96,13 +129,28 @@ app.get('/callback',async (req, res) => {
           code: code
         }
       });
-      console.log(response);
+      // console.log(response.data,"RESPONSE DATA");
       return response.data;
     } catch (error) {
       console.log(error);
       return{code:400,message:"Requesting access token failed"};
     }
   }
+
+  async function addToDB(data) {
+    // console.log("in add to db",data);
+    var store = new Store(data);
+              try {
+                const a1 = await store.save();
+                console.log("Access token saved to DB");
+
+                return "done";
+              } catch (error) {
+                return {msg: "Access token not saved into DB"}
+
+              }
+  }
+
 
 
 app.listen(3000, () => {
