@@ -59,5 +59,56 @@ router.post("/addProduct", async(req,res) => {
 
 })
 
+router.get('/getOneProduct', async(req, res) => {
+  var shop = req.query.shop;
+  var product_id= req.body.id;
+
+  try {
+    var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
+    var headers = await addHeaders(shop);
+    const resp = await axios.get(url,{headers});
+    // console.log(resp.data)
+    res.send(resp.data);
+  } catch (error) {
+    console.log(error)
+    
+  }
+})
+
+router.put('/updateProduct', async(req,res) => {
+  var shop = req.query.shop;
+  var newDetails = req.body;
+  var product_id = newDetails.product.id;
+  console.log("product_id",product_id);
+  try {
+    var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
+    var headers = await addHeaders(shop);
+    const resp = await axios.put(url,newDetails,{headers});
+    console.log("updated");
+    res.send(resp.data);
+
+  }
+  catch(error){
+    console.log(error)
+
+  }
+
+})
+
+router.delete('/deleteProduct', async(req, res) => {
+  var shop = req.query.shop;
+  var product_id= req.body.id;
+  try {
+    var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
+    var headers = await addHeaders(shop);
+    const resp = await axios.delete(url,{headers});
+    console.log("deleted")
+    res.send("product Deleted successfully");
+  } catch (error) {
+    console.log(error)
+    
+  }
+})
+
 
 module.exports = router;

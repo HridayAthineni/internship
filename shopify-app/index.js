@@ -19,7 +19,7 @@ const indexRouter = require('./routes/crud');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'write_products';
-const forwardingAddress = "https://e3dc1501cb8b.ngrok.io";
+const forwardingAddress = "https://b4d67c462af3.ngrok.io";
 
 
 mongoose.connect('mongodb://localhost:27017/Shopify',{useNewUrlParser : true, useUnifiedTopology:true})
