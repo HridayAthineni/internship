@@ -104,5 +104,104 @@ router.delete('/deleteProduct', async(req, res) => {
   }
 })
 
+//orders
+
+router.get('/getOrders',async(req, res) => {
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders.json?status=any";
+    const resp = await axios.get(url);
+    console.log("orders retrived");
+    res.send(resp.data);
+    
+  } catch (error) {
+    console.log(error)
+    res.send("error in getting the orders")
+  }
+})
+
+router.get('/getOneOrder',async(req, res) => {
+  const order_id = req.query.id;
+  console.log("order_id",order_id);
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders/"+order_id+".json";
+    const resp = await axios.get(url);
+    console.log("order retrived");
+    res.send(resp.data);
+    
+  } catch (error) {
+    console.log(error)
+    res.send("error in getting the order")
+  }
+})
+
+router.post('/postOrder', async(req, res) => {
+  const ord = req.body;
+  console.log("order",ord);
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders.json";
+    // var headers = {
+    //   'Content-Type': 'application/json'
+    // };
+    const resp = await axios.post(url,ord);
+    console.log("order posted");
+    res.send(resp.data);
+    
+  } catch (error) {
+    console.log(error)
+    res.send("error in posting the orders")
+  }
+})
+
+router.delete('/deleteOrder', async(req, res) => {
+  const order_id = req.query.id;
+  console.log("order_id",order_id);
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders/"+order_id+".json";
+    const resp = await axios.delete(url);
+    console.log("order deleted")
+    res.send("order Deleted successfully");
+  } catch (error) {
+    console.log(error);
+    res.send("error in deleting the order")
+
+  }
+})
+
+router.put('/updateOrder', async(req, res) => {
+  // const order_id = req.query.id;
+  const orderDetails = req.body;
+  const order_id = orderDetails.order.id;
+
+  console.log("orderdetails and id",order_id,orderDetails);
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders/"+order_id+".json";
+    const resp = await axios.put(url,orderDetails);
+    console.log("order updated");
+    res.send(resp.data);
+    
+  } catch (error) {
+    console.log(error)
+    res.send("error in updating the order")
+  }
+})
+
+//Retrieve inventory levels for a single inventory item
+
+router.get('/inventoryLevel', async(req, res) => {
+  // const orderDetails = req.body;
+  const id = req.query.id;
+
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/inventory_levels.json?inventory_item_ids="+id;
+    const resp = await axios.get(url);
+    console.log("inventory level");
+    res.send(resp.data);
+    
+  } catch (error) {
+    console.log(error)
+    res.send("error in getting inventory level")
+  }
+})
+
 
 module.exports = router;
