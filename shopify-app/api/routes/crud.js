@@ -3,10 +3,10 @@ var router = express.Router();
 const axios = require('axios')
 
 const Store = require('../../models/store');
+const Product = require('../../models/product');
+const Order = require('../../models/order');
+
 const integrate = require('../../integration/db')
-
-
-
 
 
 
@@ -24,14 +24,15 @@ return header;
 router.get('/getProduct', async(req,res) => {
   // console.log("in get product");
     var shop = req.query.shop;
+
     try {
-       
-          var url = "https://"+ shop + "/admin/api/2021-01/products.json";
-          var headers = await addHeaders(shop);
-          // console.log(url);
-          const resp = await axios.get(url,{headers});
+         var product = await Product.find({shop:shop});
+          // var url = "https://"+ shop + "/admin/api/2021-01/products.json";
+          // var headers = await addHeaders(shop);
+          // const resp = await axios.get(url,{headers});
+          res.json(product)
           // console.log("response in get", resp);
-          res.send(resp.data);
+          // res.send(resp.data);
 }
 catch(err) {
     console.log(err);
@@ -41,11 +42,20 @@ catch(err) {
 router.post("/addProduct", async(req,res) => {
     const shop = req.query.shop;
     const details = req.body;
+    details.product["shop"] = shop;
+    // const product = new Product(details.product);
     try {
+      // const a1 = await product.save();
+
       var url = "https://"+ shop + "/admin/api/2021-01/products.json";
       var headers = await addHeaders(shop);
       const resp = await axios.post(url,details,{headers:headers});
-      console.log("product created");
+      details.product["product_id"] = resp.data.product.id;
+      const product = new Product(details.product);
+      const a1 = await product.save();
+
+
+      // console.log("product created",resp.data.product.id);
       res.send(resp.data)
     } catch (error) {
       console.log(error)
@@ -59,11 +69,15 @@ router.get('/getOneProduct', async(req, res) => {
   var product_id= req.body.id;
 
   try {
-    var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
-    var headers = await addHeaders(shop);
-    const resp = await axios.get(url,{headers});
-    console.log("product retrived");
-    res.send(resp.data);
+    var product = await Product.find({product_id:product_id}) ;
+
+    // var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
+    // var headers = await addHeaders(shop);
+    // const resp = await axios.get(url,{headers});
+    // console.log("product retrived");
+    // res.send(resp.data);
+    res.json(product)
+    
   } catch (error) {
     console.log(error)
     
@@ -74,7 +88,10 @@ router.put('/updateProduct', async(req,res) => {
   var shop = req.query.shop;
   var newDetails = req.body;
   var product_id = newDetails.product.id;
+  var prod = await Product.findOne({product_id:product_id})
   try {
+    // const a1 = await product.save();
+
     var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
     var headers = await addHeaders(shop);
     const resp = await axios.put(url,newDetails,{headers});
@@ -90,13 +107,19 @@ router.put('/updateProduct', async(req,res) => {
 })
 
 router.delete('/deleteProduct', async(req, res) => {
+
   var shop = req.query.shop;
   var product_id= req.body.id;
+  var prod = await Product.findOne({product_id:product_id})
+
   try {
+    const a1 = await prod.remove();
+    // console.log("product deleted from db")
+
     var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
     var headers = await addHeaders(shop);
     const resp = await axios.delete(url,{headers});
-    console.log("product deleted")
+    // console.log("product deleted from endpoint")
     res.send("product Deleted successfully");
   } catch (error) {
     console.log(error)
@@ -108,6 +131,9 @@ router.delete('/deleteProduct', async(req, res) => {
 
 router.get('/getOrders',async(req, res) => {
   try {
+    // var shop = req.query.shop;
+    // var order = await Order.find({shop:shop});
+    // res.json(order)
     var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders.json?status=any";
     const resp = await axios.get(url);
     console.log("orders retrived");
@@ -143,6 +169,11 @@ router.post('/postOrder', async(req, res) => {
     //   'Content-Type': 'application/json'
     // };
     const resp = await axios.post(url,ord);
+
+    ord.order["order_id"] = resp.data.order.id;
+    const order = new Order(ord.order);
+    const a1 = await order.save();
+
     console.log("order posted");
     res.send(resp.data);
     
@@ -155,7 +186,11 @@ router.post('/postOrder', async(req, res) => {
 router.delete('/deleteOrder', async(req, res) => {
   const order_id = req.query.id;
   console.log("order_id",order_id);
+  var ord = await Order.findOne({order_id:order_id})
+  console.log("del ord",ord);
   try {
+    const a1 = await ord.remove();
+
     var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/orders/"+order_id+".json";
     const resp = await axios.delete(url);
     console.log("order deleted")

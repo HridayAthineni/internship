@@ -10,7 +10,7 @@ const CryptoJS = require('crypto-js')
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'write_products';
-const forwardingAddress = "https://58debd2beb75.ngrok.io";
+const forwardingAddress = "https://696481dfe1f9.ngrok.io";
 
 function addInstallUrl(shop,state){
     const redirect_uri = forwardingAddress + '/callback';
