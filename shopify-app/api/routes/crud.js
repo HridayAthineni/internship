@@ -238,5 +238,30 @@ router.get('/inventoryLevel', async(req, res) => {
   }
 })
 
+router.post('/updateInventory', async(req, res) => {
+  const inv = req.body;
+  // console.log("order",ord);
+  try {
+    var url = "https://74dffbe019dd03437bda9608f9938ce8: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@closestone.myshopify.com/admin/api/2021-01/inventory_levels/adjust.json";
+
+    
+    // var headers = {
+    //   'Content-Type': 'application/json'
+    // };
+    const resp = await axios.post(url,inv);
+
+    // ord.order["order_id"] = resp.data.order.id;
+    // const order = new Order(ord.order);
+    // const a1 = await order.save();
+
+    console.log("inventory updated");
+    res.send(resp.data);
+    
+  } catch (error) {
+    console.log(error)
+    res.send("error in updating the level")
+  }
+})
+
 
 module.exports = router;

@@ -1,18 +1,13 @@
-const dotenv = require('dotenv').config();
-
+// const dotenv = require('dotenv').config();
 const knex = require('knex')({
-    client: 'mysql',
+    client: 'pg',
     connection: {
-      host     : process.env.HOST,
-      user     : process.env.USER,
-      password : process.env.PW,
+      host     : "127.0.0.1",
+      user     : "postgres",
+      password : "hriday329",
       database : 'bookshelf-DB',
       charset  : 'utf8'
     }
-  })
-  const bookshelf = require('bookshelf')(knex)
+  });
   
-  // Defining models
-  const User = bookshelf.model('User', {
-    tableName: 'users'
-  })
+  module.exports.knex = knex;
