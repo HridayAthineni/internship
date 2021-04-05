@@ -90,7 +90,8 @@ router.put('/updateProduct', async(req,res) => {
   var product_id = newDetails.product.id;
   var prod = await Product.findOne({product_id:product_id})
   try {
-    // const a1 = await product.save();
+    prod.product = newDetails.product
+    const a1 = await prod.save();
 
     var url = "https://"+ shop + "/admin/api/2021-01/products/"+product_id+".json";
     var headers = await addHeaders(shop);
