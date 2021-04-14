@@ -1,0 +1,65 @@
+{
+    "PPIQ.SQU900000": {
+        "Series reference": "PPIQ.SQU900000",
+        "Description": "PPI output index - All industries ",
+        "Period": "2020.06",
+        "Previously published": "1183",
+        "Revised": "1184"
+    },
+    "PPIQ.SQU900001": {
+        "Series reference": "PPIQ.SQU900001",
+        "Description": "PPI output index - All industries excl OOD",
+        "Period": "2020.06",
+        "Previously published": "1180",
+        "Revised": "1181"
+    },
+    "PPIQ.SQUC76745": {
+        "Series reference": "PPIQ.SQUC76745",
+        "Description": "PPI published output commodity - Transport support services",
+        "Period": "2020.06",
+        "Previously published": "1400",
+        "Revised": "1603"
+    },
+    "PPIQ.SQUCC3100": {
+        "Series reference": "PPIQ.SQUCC3100",
+        "Description": "PPI output index level 3 - Wood product manufacturing",
+        "Period": "2020.06",
+        "Previously published": "1169",
+        "Revised": "1170"
+    },
+    "PPIQ.SQUCC3110": {
+        "Series reference": "PPIQ.SQUCC3110",
+        "Description": "PPI output index level 4 - Wood product manufacturing",
+        "Period": "2020.06",
+        "Previously published": "1169",
+        "Revised": "1170"
+    },
+    "PPIQ.SQUFF0000": {
+        "Series reference": "PPIQ.SQUFF0000",
+        "Description": "PPI output index level 1 - Wholesale trade",
+        "Period": "2020.06",
+        "Previously published": "1132",
+        "Revised": "1133"
+    },
+    "PPIQ.SQUFF1000": {
+        "Series reference": "PPIQ.SQUFF1000",
+        "Description": "PPI output index level 2 - Wholesale trade",
+        "Period": "2020.06",
+        "Previously published": "1132",
+        "Revised": "1133"
+    },
+    "PPIQ.SQUFF1100": {
+        "Series reference": "PPIQ.SQUFF1100",
+        "Description": "PPI output index level 3 - Wholesale trade",
+        "Period": "2020.06",
+        "Previously published": "1132",
+        "Revised": "1133"
+    },
+    "PPIQ.SQUFF1110": {
+        "Series reference": "PPIQ.SQUFF1110",
+        "Description": "PPI output index level 4 - Basic material wholesaling",
+        "Period": "2020.06",
+        "Previously published": "1147",
+        "Revised": "1149"
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "records": {
+        "record": [
+            {
+                "email": "elit@Morbi.com",
+                "phone": "0500 170842",
+                "country": "Reunion",
+                "name": "Kelly"
+            },
+            {
+                "email": "euismod.enim@consequat.com",
+                "phone": "(016977) 7843",
+                "country": "Zimbabwe",
+                "name": "Buckminster"
+            },
+            {
+                "email": "eget.massa@nislQuisquefringilla.ca",
+                "phone": "07624 609026",
+                "country": "Chad",
+                "name": "Jade"
+            },
+            {
+                "email": "fringilla.mi.lacinia@nislelementumpurus.co.uk",
+                "phone": "0800 590745",
+                "country": "Lebanon",
+                "name": "Linda"
+            },
+            {
+                "email": "tincidunt.neque.vitae@tortor.net",
+                "phone": "056 4415 1965",
+                "country": "Jamaica",
+                "name": "Tad"
+            },
+            {
+                "email": "ut.odio@duinec.co.uk",
+                "phone": "(028) 7955 2191",
+                "country": "Gibraltar",
+                "name": "Lisandra"
+            }
+        ]
+    }
+}
